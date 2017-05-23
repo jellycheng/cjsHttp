@@ -1,0 +1,25 @@
+{
+  "name": "cjs/http",
+  "description": "The cjs http package.",
+  "license": "MIT",
+  "homepage": "http://www.chengjinsheng.com",
+  "authors": [
+    {
+      "name": "jelly",
+      "email": "42282367@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "classmap": [
+
+    ],
+    "files": [
+    ],
+    "psr-4": {
+      "CjsHttp\\": "src/"
+    }
+  }
+}
