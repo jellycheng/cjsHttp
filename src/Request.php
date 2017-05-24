@@ -164,7 +164,7 @@ class Request
      * @var array
      */
     protected static $formats;
-
+    //生成request类对象的回调函数（工厂），本函数一定返回Request类or其子类对象
     protected static $requestFactory;
 
     /**
@@ -214,8 +214,8 @@ class Request
     }
 
     /**
-     * 实例化request请求类并清洗php全局变量
-     * @return Request A new request
+     * 通过PHP全局变量（$_GET, $_POST, $_COOKIE, $_FILES,$_SERVER）作为参数进行实例化Request类对象
+     * @return Request 类对象
      */
     public static function createFromGlobals()
     {
@@ -768,7 +768,6 @@ class Request
     public function getQueryString()
     {
         $qs = static::normalizeQueryString($this->server->get('QUERY_STRING'));
-
         return '' === $qs ? null : $qs;
     }
 
@@ -777,9 +776,7 @@ class Request
         if (self::$trustedProxies && self::$trustedHeaders[self::HEADER_CLIENT_PROTO] && $proto = $this->headers->get(self::$trustedHeaders[self::HEADER_CLIENT_PROTO])) {
             return in_array(strtolower(current(explode(',', $proto))), array('https', 'on', 'ssl', '1'));
         }
-
         $https = $this->server->get('HTTPS');
-
         return !empty($https) && 'off' !== strtolower($https);
     }
 
@@ -807,11 +804,9 @@ class Request
 
         if (count(self::$trustedHostPatterns) > 0) {
             // to avoid host header injection attacks, you should provide a list of trusted host patterns
-
             if (in_array($host, self::$trustedHosts)) {
                 return $host;
             }
-
             foreach (self::$trustedHostPatterns as $pattern) {
                 if (preg_match($pattern, $host)) {
                     self::$trustedHosts[] = $host;
@@ -819,7 +814,6 @@ class Request
                     return $host;
                 }
             }
-
             throw new \UnexpectedValueException(sprintf('Untrusted Host "%s"', $host));
         }
 
@@ -831,7 +825,7 @@ class Request
         $this->method = null;
         $this->server->set('REQUEST_METHOD', $method);
     }
-
+    //获取请求方法，默认返回GET
     public function getMethod()
     {
         if (null === $this->method) {
@@ -840,7 +834,7 @@ class Request
             if ('POST' === $this->method) {
                 if ($method = $this->headers->get('X-HTTP-METHOD-OVERRIDE')) {
                     $this->method = strtoupper($method);
-                } elseif (self::$httpMethodParameterOverride) {
+                } elseif (self::$httpMethodParameterOverride) {//通过url中参数来覆盖请求方法?_method=GETorPOST等
                     $this->method = strtoupper($this->request->get('_method', $this->query->get('_method', 'POST')));
                 }
             }
@@ -1120,7 +1114,7 @@ class Request
 
     protected function prepareBaseUrl()
     {
-        $filename = basename($this->server->get('SCRIPT_FILENAME'));
+        $filename = basename($this->server->get('SCRIPT_FILENAME'));//$_SERVER['SCRIPT_FILENAME']=/path/to/xxx.php
 
         if (basename($this->server->get('SCRIPT_NAME')) === $filename) {
             $baseUrl = $this->server->get('SCRIPT_NAME');
@@ -1129,9 +1123,9 @@ class Request
         } elseif (basename($this->server->get('ORIG_SCRIPT_NAME')) === $filename) {
             $baseUrl = $this->server->get('ORIG_SCRIPT_NAME'); // 1and1 shared hosting compatibility
         } else {
-            // Backtrack up the script_filename to find the portion matching
+            // Backtrack up the script_filename to find the portion matching 返回脚本文件名以找到匹配的部分
             // php_self
-            $path = $this->server->get('PHP_SELF', '');
+            $path = $this->server->get('PHP_SELF', '');//url/to/x
             $file = $this->server->get('SCRIPT_FILENAME', '');
             $segs = explode('/', trim($file, '/'));
             $segs = array_reverse($segs);

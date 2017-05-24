@@ -1,6 +1,7 @@
 <?php
 namespace CjsHttp\Bag;
 
+//处理请求头值
 class HeaderBag implements \IteratorAggregate, \Countable
 {
     protected $headers = array();

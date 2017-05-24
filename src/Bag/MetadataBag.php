@@ -37,7 +37,7 @@ class MetadataBag implements SessionBagInterface
     private $updateThreshold;
 
 
-    public function __construct($storageKey = '_sf2_meta', $updateThreshold = 0)
+    public function __construct($storageKey = '_cjs_meta', $updateThreshold = 0)
     {
         $this->storageKey = $storageKey;
         $this->updateThreshold = $updateThreshold;

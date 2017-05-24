@@ -2,3 +2,8 @@
 vendor
 .DS_Store
 composer.lock
+Thumbs.db
+.buildpath
+.project
+.settings
+.phpstorm.meta.php

@@ -1,10 +1,11 @@
 <?php
 namespace CjsHttp\Bag;
 
+//处理$_SERVER值
 class ServerBag extends ParameterBag
 {
     /**
-     * 获取请求头
+     * 获取所有请求头
      * @return array
      */
     public function getHeaders()
@@ -14,9 +15,7 @@ class ServerBag extends ParameterBag
         foreach ($this->parameters as $key => $value) {
             if (0 === strpos($key, 'HTTP_')) {
                 $headers[substr($key, 5)] = $value;
-            }
-            // CONTENT_* are not prefixed with HTTP_
-            elseif (isset($contentHeaders[$key])) {
+            } elseif (isset($contentHeaders[$key])) {// CONTENT_* are not prefixed with HTTP_
                 $headers[$key] = $value;
             }
         }

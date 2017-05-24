@@ -2,7 +2,7 @@
 namespace CjsHttp\Bag;
 
 use CjsHttp\File\UploadedFile;
-
+//处理$_FILES值
 class FileBag extends ParameterBag
 {
     private static $fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
