@@ -645,6 +645,23 @@ class Request
         return $this->pathInfo;
     }
 
+    public function path()
+    {
+        $pattern = trim($this->getPathInfo(), '/');
+
+        return $pattern == '' ? '/' : $pattern;
+    }
+
+    /**
+     * Get the current encoded path info for the request.
+     *
+     * @return string
+     */
+    public function decodedPath()
+    {
+        return rawurldecode($this->path());
+    }
+
     /**
      *  * http://localhost/index.php         returns an empty string
      *  * http://localhost/index.php/page    returns an empty string
