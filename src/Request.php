@@ -6,7 +6,7 @@ use CjsHttp\Bag\ParameterBag;
 use CjsHttp\Bag\FileBag;
 use CjsHttp\Bag\HeaderBag;
 use CjsHttp\Bag\ServerBag;
-
+use Closure;
 
 class Request
 {
@@ -166,6 +166,8 @@ class Request
     protected static $formats;
     //生成request类对象的回调函数（工厂），本函数一定返回Request类or其子类对象
     protected static $requestFactory;
+    //闭包
+    protected $routeResolver;
 
     /**
      * @param array  $query      The GET parameters
@@ -1292,4 +1294,22 @@ class Request
 
         return new static($query, $request, $attributes, $cookies, $files, $server, $content);
     }
+
+
+    public function getRouteResolver()
+    {
+        return $this->routeResolver ?: function() {};
+    }
+
+    /**
+     * @param  \Closure  $callback
+     * @return $this
+     */
+    public function setRouteResolver(Closure $callback)
+    {
+        $this->routeResolver = $callback;
+
+        return $this;
+    }
+
 }
