@@ -1312,4 +1312,14 @@ class Request
         return $this;
     }
 
+    public function route()
+    {
+        if (func_num_args() == 1)
+        {
+            return $this->route()->parameter(func_get_arg(0));
+        } else {
+            return call_user_func($this->getRouteResolver());
+        }
+    }
+
 }
